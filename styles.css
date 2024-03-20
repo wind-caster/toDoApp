@@ -1,0 +1,62 @@
+*{
+    box-sizing: border-box;
+}
+
+header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+#dashboard-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.dashboard{
+    background-color: pink;
+    width: 350px;
+    margin: 10px auto;
+}
+
+.dashboard-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: blueviolet;
+    padding: 0 5px;
+    border-radius: 5px;
+}
+
+.dashboard-btns{
+    background-color: blue;
+}
+
+.note-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 10px;
+    margin: 15px auto;
+    box-shadow: 0 2.5px 10px 0 grey;
+}
+
+.note-textbox{
+    width: 75%;
+    background-color: white;
+    border-radius: 2.5px;
+    padding: 5px;
+}
+
+input[type="checkbox"]{
+    scale: 1.5;
+}
+
+.hidden{
+    display: none;
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Get things done, simply</title>
+</head>
+<body>
+    <main id="todo-app">
+        <header>
+            <h1>Get things done, simply.</h1>
+            <button type="button" id="new-dashboard-btn">New dashboard</button>
+        </header>
+        <div id="dashboard-container">
+            <dialog id="new-dashboard-dialog">
+                <form method="dialog" style="text-align: center;">
+                    <h4>Title</h4>
+                    <input type="text" id="dashboard-title-input">
+                    <button type="submit" id="create-dashboard-btn">Create</button>
+                </form>
+            </dialog>
+            <div class="dashboard">
+                <nav class="dashboard-header">
+                    <button>Toggle</button>
+                    <h5>First Dashboard</h5>
+                    <span class="dashboard-btns">
+                        <button onclick="renderNewNote(this.parentElement.parentElement.parentElement)">New note</button>
+                        <button>Delete</button>
+                    </span>
+                </nav>
+                <div id="dashboard${dashboard.id}-notes-container" class="note-container">Nota 1</div>
+            </div>
+            <div class="dashboard">
+                <nav class="dashboard-header">
+                    <button>Toggle</button>
+                    <h5>First Dashboard</h5>
+                    <span class="dashboard-btns">
+                        <button>New note</button>
+                        <button>Delete</button>
+                    </span>
+                </nav>
+                <div id="dashboard${dashboard.id}-notes-container" class="notes container">Nota 1</div>
+            </div>
+        </div>
+    </main>
+    <script src="./main.js"></script>
+</body>
+</html>
