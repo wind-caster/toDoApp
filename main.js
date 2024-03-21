@@ -68,11 +68,11 @@ class Note {
         this.isComplete = false,
         this.boardId = boardId,
         this.htmlComp = `
-                            <div id="db${this.boardId}-note${this.id}" class="note-container">
+                            <div id="note-${this.id}" class="note-container">
                                 <span class="checkbox-container">
                                     <input type="checkbox" title="Mark as complete">
                                 </span>
-                                <span class="note-textbox" contenteditable="true">${this.text}</span>
+                                <span class="note-textbox" contenteditable="true" oninput="editNote(this)">${this.text}</span>
                                 <span class="delete-btn-container">
                                     <button class="delete-note-btn" title="Delete note" onclick="deleteNote(this)">
                                         <svg class="board-delete-btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"  fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">
@@ -84,6 +84,9 @@ class Note {
                             </div>`
     }//noteConstructor
 
+    editNoteTextContent(textBoxValue){
+        this.text = textBoxValue;
+    }
     /* markAsComplete(){
 
     }//markAsComplete
@@ -143,7 +146,18 @@ function deleteNote(noteEl) {
     //delete from Board array
 }
 
-
+function editNote(textBox) {
+    const noteBoardId = textBox.parentElement.parentElement.parentElement.id;
+    const boardObjectIndex = boardsContainerArr.indexOf(boardsContainerArr.find(({id})=>id == noteBoardId));
+    const notesArr = boardsContainerArr[boardObjectIndex].notes;
+    const regex = /\d/g
+    const noteId =  textBox.parentElement.id.match(regex).join("");
+    const note = notesArr.find((item)=>item.id == noteId)
+    if(note){
+        note.editNoteTextContent(textBox.textContent)
+    }
+    
+}
 
 
 
