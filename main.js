@@ -113,10 +113,15 @@ const renderNewBoard = () => {
 };
 
 const renderNewNote = (boardEl) => {
-    const Board = boardEl;
-    const note = new Note(Board.id);
-    boardEl.lastElementChild.insertAdjacentHTML("beforeend", note.htmlComp);
-    boardEl.lastElementChild.classList.remove("hidden");
+    const board = boardEl;
+    const note = new Note(board.id);
+    board.lastElementChild.insertAdjacentHTML("beforeend", note.htmlComp);
+    board.lastElementChild.classList.remove("hidden");
+    const boardInstance = boardsContainerArr.find(({id})=> id == board.id);
+    if (boardInstance) {
+        boardInstance.notes.push(note);
+    }
+    //Modify the corresponding board instance to be able to hold this note in its notes property array.
 };
 
 function deleteBoard(boardEl){
@@ -124,12 +129,12 @@ function deleteBoard(boardEl){
     const board = boardEl.parentElement.parentElement.parentElement 
     const boardExistsInArr = Boolean(boardsContainerArr.find(({id})=>id == board.id)); 
     if(boardExistsInArr){
-        console.log("Entering the if statement");
         boardsContainerArr.splice(
             boardsContainerArr.indexOf(boardsContainerArr.find(({id})=>id == board.id)
             ),
         1);
-    }
+    }//deletes the board object from the boardContainerArray if it exists
+
     board.remove();
 };//deleteBoard
 
