@@ -63,12 +63,12 @@ class Note {
     static noteIdCount = 0
 
     constructor(boardId){
-        this.id = ++Note.noteIdCount,
+        this.id = `note-${++Note.noteIdCount}`,
         this.text = "Edit me...",
         this.isComplete = false,
         this.boardId = boardId,
         this.htmlComp = `
-                            <div id="note-${this.id}" class="note-container">
+                            <div id="${this.id}" class="note-container">
                                 <span class="checkbox-container">
                                     <input type="checkbox" title="Mark as complete">
                                 </span>
@@ -128,7 +128,6 @@ const renderNewNote = (boardEl) => {
 };
 
 function deleteBoard(boardEl){
-    console.log("Delete board clicked");
     const board = boardEl.parentElement.parentElement.parentElement 
     const boardExistsInArr = Boolean(boardsContainerArr.find(({id})=>id == board.id)); 
     if(boardExistsInArr){
@@ -142,16 +141,24 @@ function deleteBoard(boardEl){
 };//deleteBoard
 
 function deleteNote(noteEl) {
+    const noteBoardId = noteEl.parentElement.parentElement.parentElement.parentElement.id;
+    const boardObjectIndex = boardsContainerArr.indexOf(boardsContainerArr.find(({id})=>id == noteBoardId));
+    const notesArr = boardsContainerArr[boardObjectIndex].notes;
+    const noteId =  noteEl.parentElement.parentElement.id;
+    const note = notesArr.find((item)=>item.id == noteId)
+    if(note){
+        notesArr.splice(notesArr.indexOf(note), 1)
+        console.log("Note deleted succesfully!");
+    }
+    
     noteEl.parentElement.parentElement.remove()
-    //delete from Board array
 }
 
 function editNote(textBox) {
     const noteBoardId = textBox.parentElement.parentElement.parentElement.id;
     const boardObjectIndex = boardsContainerArr.indexOf(boardsContainerArr.find(({id})=>id == noteBoardId));
     const notesArr = boardsContainerArr[boardObjectIndex].notes;
-    const regex = /\d/g
-    const noteId =  textBox.parentElement.id.match(regex).join("");
+    const noteId =  textBox.parentElement.id;
     const note = notesArr.find((item)=>item.id == noteId)
     if(note){
         note.editNoteTextContent(textBox.textContent)
