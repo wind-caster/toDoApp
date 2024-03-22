@@ -72,6 +72,11 @@ h1{
 }
 .toggle-btn-icon{
     scale: 1.5;
+    transition-duration: 0.1s;
+}
+
+.rotate{
+    transform: rotate(-90deg);
 }
 
 .board-header h4{
@@ -135,6 +140,7 @@ input[type="checkbox"]{
     border-radius: 50%;
     color: red;
     border-color: transparent;
+    cursor: pointer;
 }
 .delete-note-btn:hover{
     color: darkred;
@@ -158,4 +164,9 @@ input[type="checkbox"], .delete-note-btn:hover{
 }
 .hidden{
     display: none;
+}
+
+.checked-box{
+    color: grey;
+    text-decoration: line-through;
 }

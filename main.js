@@ -19,7 +19,7 @@ class Board {
         this.htmlComp = `
                         <div id="${this.id} "class="board">
                             <nav class="board-header">
-                                    <button type="button" class="hide-or-show-notes-btn trans-btn" title="Show/hide notes">
+                                    <button type="button" class="hide-or-show-notes-btn trans-btn" title="Show/hide notes" onclick="toggleNotesContainer(this)">
                                         <svg class="toggle-btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
                                             <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                                         </svg>
@@ -70,7 +70,7 @@ class Note {
         this.htmlComp = `
                             <div id="${this.id}" class="note-container">
                                 <span class="checkbox-container">
-                                    <input type="checkbox" title="Mark as complete">
+                                    <input type="checkbox" title="Mark as complete" onchange="markAsChecked(this.parentElement.nextElementSibling)">
                                 </span>
                                 <span class="note-textbox" contenteditable="true" oninput="editNote(this)">${this.text}</span>
                                 <span class="delete-btn-container">
@@ -118,8 +118,11 @@ const renderNewBoard = () => {
 const renderNewNote = (boardEl) => {
     const board = boardEl;
     const note = new Note(board.id);
-    board.lastElementChild.insertAdjacentHTML("beforeend", note.htmlComp);
     board.lastElementChild.classList.remove("hidden");
+    if(board.firstElementChild.firstElementChild.firstElementChild.classList.contains("rotate")){
+        board.firstElementChild.firstElementChild.firstElementChild.classList.remove("rotate")
+    }
+    board.lastElementChild.insertAdjacentHTML("beforeend", note.htmlComp);
     const boardInstance = boardsContainerArr.find(({id})=> id == board.id);
     if (boardInstance) {
         boardInstance.notes.push(note);
@@ -150,7 +153,9 @@ function deleteNote(noteEl) {
         notesArr.splice(notesArr.indexOf(note), 1)
         console.log("Note deleted succesfully!");
     }
-    
+    if (notesArr.length === 0) {
+        noteEl.parentElement.parentElement.parentElement.classList.add("hidden");
+    }
     noteEl.parentElement.parentElement.remove()
 }
 
@@ -166,7 +171,22 @@ function editNote(textBox) {
     
 }
 
+const toggleNotesContainer = (boardEl)=>{
+    console.log("Event triggered!");
+    const boardId =  boardEl.parentElement.parentElement.id;
+    const board = boardsContainerArr.find(({id})=>id == boardId);
+    if (board.notes.length > 0) {
+        boardEl.firstElementChild.classList.toggle("rotate");
+        setTimeout(()=>{boardEl.parentElement.parentElement.lastElementChild.classList.toggle("hidden")}, 50);
+    } else{
+        console.log("No notes on this board");
+    }
+}
 
+function markAsChecked(noteTextBox) {
+    noteTextBox.classList.toggle("checked-box");
+    noteTextBox.removeAttribute("contenteditable");
+}
 
 newBoardBtn.addEventListener("click", ()=>{
     boardTitleInput.value="";
@@ -175,6 +195,7 @@ newBoardBtn.addEventListener("click", ()=>{
 createBoardBtn.addEventListener("click", ()=>{
     const myBoard = renderNewBoard();
 });
+
 
 
 
