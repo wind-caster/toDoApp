@@ -76,6 +76,7 @@ const newBoardDialog = document.getElementById("new-board-dialog");
 const boardsContainer = document.getElementById("boards-container")
 const createBoardBtn = document.getElementById("create-board-btn");
 const boardTitleInput = document.getElementById("board-title-input");
+const clearDataBtn = document.getElementById("clear-data-btn");
 
 function retrieveAndRenderData() {
     if (localStorage.getItem("data") !== null ) {
@@ -269,6 +270,15 @@ newBoardBtn.addEventListener("click", ()=>{
 });//shows board creation modal
 
 createBoardBtn.addEventListener("click", createNewBoard);
+
+clearDataBtn.addEventListener("click", ()=>{
+    localStorage.clear();
+    boardsContainerArr = [];
+    const collection = boardsContainer.children;
+    while (collection.length > 0) {
+        collection[0].remove();
+    }
+});
 
 window.addEventListener("load", retrieveAndRenderData);
 
