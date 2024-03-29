@@ -7,14 +7,19 @@ class Board {
 
     static idCount = 0
 
-    constructor(id, title, notes = [], theme = "pink", ){
+    constructor(id, title, notes = [],completedNotes, theme = "pink", created, modified){
         const date = new Date();
         this.id = id !== undefined ? id : `board-${++Board.idCount}-${date.getFullYear()}${date.getMonth()}${date.getDay()}${date.getHours()}${date.getMinutes()}${date.getSeconds()}`, //string
         this.title  = title, //string
         this.notes = notes !== undefined ? notes : [], //array
+        this.completedNotes = completedNotes !== undefined ? completedNotes : [],
         this.theme = theme !== undefined ? theme : "pink",//object
-        this.btnIsOpen = false
+        this.btnIsOpen = false, //isVisible
+        this.created = created !== undefined ? created : //creation date,
+        this.modified = modified !== undefined ? modified : //modified date
     }//boardConstructor
+
+    getId(){}
 
     setNewTitle(newTitle){
          this.title = newTitle;
@@ -54,10 +59,14 @@ class Note {
         this.id = id !== undefined ? id : `note-${++Note.noteIdCount}-${date.getFullYear()}${date.getMonth()}${date.getDay()}${date.getHours()}${date.getMinutes()}${date.getSeconds()}`,
         this.text = text !== undefined ? text : "Edit me...",
         this.isComplete = isComplete !== undefined ? isComplete : false,
-        this.boardId = boardId
+        this.boardId = boardId,
+        this.created = ,
+        this.modified = 
     }//noteConstructor
 
-    editNoteTextContent(textBoxValue){
+    getId(){}
+
+    editNoteTextContent(textBoxValue){//updateText
         this.text = textBoxValue;
         return console.log(`${this.id} text edited successfully`);
     }//editNoteTextContent
@@ -67,10 +76,10 @@ class Note {
         return console.log(`${this.id} isComplete!`)
     }//markAsComplete
 
+    setModified(){}//
+
 }//Note
 
-let localStorageRetrievedData = []
-let boardsContainerArr = [];
 const newBoardBtn = document.getElementById("new-board-btn");
 const newBoardDialog = document.getElementById("new-board-dialog");
 const boardsContainer = document.getElementById("boards-container")
@@ -78,6 +87,11 @@ const createBoardBtn = document.getElementById("create-board-btn");
 const boardTitleInput = document.getElementById("board-title-input");
 const clearDataBtn = document.getElementById("clear-data-btn");
 
+let localStorageRetrievedData = []
+let boardsContainerArr = [];
+let modifiedContainer = "";
+
+//getAndRenderLocalStorage
 function retrieveAndRenderData() {
     if (localStorage.getItem("data") !== null ) {
         const data = JSON.parse(localStorage.getItem("data"));
@@ -105,6 +119,7 @@ function retrieveAndRenderData() {
     
 }
 
+//rendering a Note as Complete should be part of the render Note function
 function formatAsComplete(noteId) {
     const newCheckedNote = document.getElementById(noteId);
     newCheckedNote.classList.toggle("checked-box");
@@ -143,39 +158,6 @@ function renderBoard(boardId, boardTitle) {
     boardsContainer.insertAdjacentHTML("beforeend", boardBluePrint);
 }
 
-function updateLocalStorage() {
-    localStorage.setItem("data", JSON.stringify(boardsContainerArr));
-}
-
-/*Board functions (create, delete, editTitle)*/
-function createNewBoard(){
-    const newBoard = new Board(undefined,boardTitleInput.value, undefined, undefined);
-    boardsContainerArr.push(newBoard);
-    updateLocalStorage();
-    renderBoard(newBoard.id, newBoard.title);
-    console.log(`New board ${newBoard.id} created successfully`);
-};//createNewBoard
-
-function deleteBoard(boardEl){
-    const board = boardEl;
-    const removed = boardsContainerArr.splice(boardsContainerArr.indexOf(boardsContainerArr.find(({id})=>id === board.id)),1);
-    updateLocalStorage();//updates the local storage
-    board.remove();
-    return console.log(`Removed ${removed} from ${boardsContainerArr}`);
-};//deleteBoard
-
-function editBoardTitle(boardId, newTitle){
-    console.log("editBoardTitle event triggered!");
-    console.log(`The board id is: ${boardId}, its data type is: ${typeof(boardId)}`);
-    const boardIndex = boardsContainerArr.findIndex((object)=>object.id == boardId);
-    console.log(boardIndex);
-    boardsContainerArr[boardIndex].setNewTitle(newTitle);
-    updateLocalStorage();
-    console.log(`New title is: ${boardsContainerArr[boardIndex].title}`);
-}//editBoardTitle
-
-//Render functions
-
 function renderNote(noteId, noteText, boardId){
     const noteBluePrint = `
                             <div id="${noteId}" class="note-container">
@@ -196,13 +178,59 @@ function renderNote(noteId, noteText, boardId){
     board.lastElementChild.insertAdjacentHTML("beforeend", noteBluePrint);
 };
 
+//TODO removeBoardEl()
+//TODO removeNoteEl()
+
+function updateLocalStorage() {
+    localStorage.setItem("data", JSON.stringify(boardsContainerArr));
+}
+
+//TODO: Create a deleteLocalStorage function and a removeBoardEl and removeNoteEl function that will help with the delete board/note methdos, and when clearing the local storage
+clearDataBtn.addEventListener("click", ()=>{
+    localStorage.clear();
+    boardsContainerArr = [];
+    const collection = boardsContainer.children;
+    while (collection.length > 0) {
+        collection[0].remove();
+    }
+});
+
+//createBoard
+function createNewBoard(){
+    const newBoard = new Board(undefined,boardTitleInput.value, undefined, undefined);
+    boardsContainerArr.push(newBoard);
+    updateLocalStorage();
+    renderBoard(newBoard.id, newBoard.title);
+    console.log(`New board ${newBoard.id} created successfully`);
+};//createNewBoard
+
+//deleteBoard
+function deleteBoard(boardEl){
+    const board = boardEl;
+    const removed = boardsContainerArr.splice(boardsContainerArr.indexOf(boardsContainerArr.find(({id})=>id === board.id)),1);
+    updateLocalStorage();//updates the local storage
+    board.remove();
+    return console.log(`Removed ${removed} from ${boardsContainerArr}`);
+};//deleteBoard
+
+/*Board methods*/
+//Board.setTitle()
+function editBoardTitle(boardId, newTitle){
+    console.log("editBoardTitle event triggered!");
+    console.log(`The board id is: ${boardId}, its data type is: ${typeof(boardId)}`);
+    const boardIndex = boardsContainerArr.findIndex((object)=>object.id == boardId);
+    console.log(boardIndex);
+    boardsContainerArr[boardIndex].setNewTitle(newTitle);
+    updateLocalStorage();
+    console.log(`New title is: ${boardsContainerArr[boardIndex].title}`);
+}//editBoardTitle
+
+
 function toggleBtnOpen(boardId) {
     const board = document.getElementById(boardId);
     board.lastElementChild.classList.remove("hidden");
     board.firstElementChild.firstElementChild.firstElementChild.classList.contains("rotate") ? board.firstElementChild.firstElementChild.firstElementChild.classList.remove("rotate") : null;//hide-or-show-notes-btn functionality
 }
-
-//Note functions (create, delete, edit)
 
 const createNewNote = (boardEl) => {
     const board = boardEl;
@@ -217,6 +245,7 @@ const createNewNote = (boardEl) => {
     return console.log(`New note: ${note.id} created and stored in: ${boardInstance.notes}`);
 };//createNewNote()
 
+//deleteNote
 function removeNote(boardEl, noteEl) {
     const boardId = boardEl.id.trim();
     const noteId = noteEl.id.trim();
@@ -227,6 +256,7 @@ function removeNote(boardEl, noteEl) {
     noteEl.remove();
 }//removeNote
 
+//setNote
 function editNote(noteEl, textBoxContent) {
     const board = boardsContainerArr.find((item)=> item.id === noteEl.parentElement.parentElement.id);
     const note = board.getNote(noteEl.id);
@@ -235,6 +265,7 @@ function editNote(noteEl, textBoxContent) {
     updateLocalStorage();
 }//editNote
 
+//toggleIsVisible
 const toggleNotesContainer = (boardEl)=>{
     const boardId =  boardEl.parentElement.parentElement.id;
     const board = boardsContainerArr.find(({id})=>id == boardId);
@@ -247,6 +278,8 @@ const toggleNotesContainer = (boardEl)=>{
     }
 }//toggleNotesContainer
 
+/*Note methods*/
+//Mark as complete (Render a note as complete should be a function on renderNote())
 function markAsChecked(noteEl) {
     const board = boardsContainerArr.find((item)=> item.id === noteEl.parentElement.parentElement.id);
     const noteId = noteEl.id;
@@ -262,6 +295,9 @@ function markAsChecked(noteEl) {
     updateLocalStorage();
 }//markAsChecked
 
+//TODO updateText
+//set Modified()
+
 /*Event listeners*/
 
 newBoardBtn.addEventListener("click", ()=>{
@@ -270,15 +306,6 @@ newBoardBtn.addEventListener("click", ()=>{
 });//shows board creation modal
 
 createBoardBtn.addEventListener("click", createNewBoard);
-
-clearDataBtn.addEventListener("click", ()=>{
-    localStorage.clear();
-    boardsContainerArr = [];
-    const collection = boardsContainer.children;
-    while (collection.length > 0) {
-        collection[0].remove();
-    }
-});
 
 window.addEventListener("load", retrieveAndRenderData);
 
