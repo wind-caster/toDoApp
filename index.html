@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="./Src/Images/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -49,6 +50,13 @@
                 <input type="text" id="board-title-input">
                 <button type="submit" id="create-board-btn">Create</button>
             </form>
+            <div id="theme-picker-container">
+                <div id="nyanza" class="theme-picker" data-value="nyanza" onclick="pickTheme(this)"></div>
+                <div id="columbiaBlue" class="theme-picker" data-value="columbiaBlue" onclick="pickTheme(this)"></div>
+                <div id="timberWolf" class="theme-picker" data-value="timberWolf" onclick="pickTheme(this)"></div>
+                <div id="cherryBlossomPink" class="theme-picker selected" data-value="cherryBlossomPink" onclick="pickTheme(this)"></div>
+                <div id="cpalePurple" class="theme-picker" data-value="palePurple" onclick="pickTheme(this)"></div>
+            </div>
         </dialog>
         <div id="boards-container">
         </div>

@@ -77,10 +77,81 @@ h1{
     align-items: baseline;
     justify-content: space-evenly;
 }
+/*Dialog styling*/
+#theme-picker-container{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+}
+.theme-picker{
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    min-width: 25px;
+    min-height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.selected{
+    box-shadow: 0 0 3px 3px grey;
+    outline: solid 2px black;
+    border-radius: 50%;
+}
+#theme-picker-container  div:nth-child(1){
+    background-color: #EEFFDB;
+}
+
+#theme-picker-container  div:nth-child(2){
+    background-color: #BFDBF7;
+}
+
+#theme-picker-container  div:nth-child(3){
+    background-color: #CFD2CD;
+}
+
+#theme-picker-container  div:nth-child(4){
+    background-color: #FBB7C0;
+}
+
+#theme-picker-container  div:nth-child(5){
+    background-color: #E8D7FF;
+}
+.nyanza-header{
+    background-color: #EEFFDB;
+}
+.nyanza-board{
+    border: solid 2px #EEFFDB;
+}
+.columbiaBlue-header{
+    background-color: #BFDBF7;
+}
+.columbiaBlue-board{
+    border: solid 2px #BFDBF7;
+}
+.timberWolf-header{
+    background-color: #CFD2CD;
+}
+.timberWolf-board{
+    border: solid 2px #CFD2CD;
+}
+.cherryBlossomPink-header{
+    background-color: #FBB7C0;
+}
+.cherryBlossomPink-board{
+    border: solid 2px #FBB7C0;
+}
+.palePurple-header{
+    background-color: #E8D7FF;
+}
+.palePurple-board{
+    border: solid 2px #E8D7FF;
+}
 
 /*Dashboard component styles*/
 .board{
-    border: solid 2px violet;
     width: 350px;
     margin: 10px auto;
 }
@@ -88,7 +159,6 @@ h1{
 .board-header{
     display: grid;
     grid-template-columns: 1fr 3fr 2fr;
-    background-color: violet;
     box-shadow: 0 2px 2px 0 grey;
 }
 
@@ -97,6 +167,9 @@ h1{
 }
 .toggle-btn-icon{
     scale: 1.5;
+}
+
+.hide-or-show-notes-btn{
     transition-duration: 0.1s;
 }
 
@@ -141,7 +214,7 @@ h1{
 }
 
 .note-container:hover{
-    box-shadow: 0 2.5px 5px 0 green;
+    box-shadow: 0 2.5px 5px 0 black;
 }
 
 .note-textbox{
